@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as NetworkRouteImport } from './routes/network'
@@ -16,6 +17,11 @@ import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PostRoute = PostRouteImport.update({
   id: '/post',
   path: '/post',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/network': typeof NetworkRoute
   '/notifications': typeof NotificationsRoute
   '/post': typeof PostRoute
+  '/profile': typeof ProfileRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/network': typeof NetworkRoute
   '/notifications': typeof NotificationsRoute
   '/post': typeof PostRoute
+  '/profile': typeof ProfileRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/network': typeof NetworkRoute
   '/notifications': typeof NotificationsRoute
   '/post': typeof PostRoute
+  '/profile': typeof ProfileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,8 +90,16 @@ export interface FileRouteTypes {
     | '/network'
     | '/notifications'
     | '/post'
+    | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/jobs' | '/messages' | '/network' | '/notifications' | '/post'
+  to:
+    | '/'
+    | '/jobs'
+    | '/messages'
+    | '/network'
+    | '/notifications'
+    | '/post'
+    | '/profile'
   id:
     | '__root__'
     | '/'
@@ -91,6 +108,7 @@ export interface FileRouteTypes {
     | '/network'
     | '/notifications'
     | '/post'
+    | '/profile'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,10 +118,18 @@ export interface RootRouteChildren {
   NetworkRoute: typeof NetworkRoute
   NotificationsRoute: typeof NotificationsRoute
   PostRoute: typeof PostRoute
+  ProfileRoute: typeof ProfileRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/post': {
       id: '/post'
       path: '/post'
@@ -156,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   NetworkRoute: NetworkRoute,
   NotificationsRoute: NotificationsRoute,
   PostRoute: PostRoute,
+  ProfileRoute: ProfileRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
