@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PostRouteImport } from './routes/post'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as NetworkRouteImport } from './routes/network'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -30,6 +31,11 @@ const NetworkRoute = NetworkRouteImport.update({
   path: '/network',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JobsRoute = JobsRouteImport.update({
   id: '/jobs',
   path: '/jobs',
@@ -44,6 +50,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/jobs': typeof JobsRoute
+  '/messages': typeof MessagesRoute
   '/network': typeof NetworkRoute
   '/notifications': typeof NotificationsRoute
   '/post': typeof PostRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/jobs': typeof JobsRoute
+  '/messages': typeof MessagesRoute
   '/network': typeof NetworkRoute
   '/notifications': typeof NotificationsRoute
   '/post': typeof PostRoute
@@ -59,21 +67,36 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/jobs': typeof JobsRoute
+  '/messages': typeof MessagesRoute
   '/network': typeof NetworkRoute
   '/notifications': typeof NotificationsRoute
   '/post': typeof PostRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/jobs' | '/network' | '/notifications' | '/post'
+  fullPaths:
+    | '/'
+    | '/jobs'
+    | '/messages'
+    | '/network'
+    | '/notifications'
+    | '/post'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/jobs' | '/network' | '/notifications' | '/post'
-  id: '__root__' | '/' | '/jobs' | '/network' | '/notifications' | '/post'
+  to: '/' | '/jobs' | '/messages' | '/network' | '/notifications' | '/post'
+  id:
+    | '__root__'
+    | '/'
+    | '/jobs'
+    | '/messages'
+    | '/network'
+    | '/notifications'
+    | '/post'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   JobsRoute: typeof JobsRoute
+  MessagesRoute: typeof MessagesRoute
   NetworkRoute: typeof NetworkRoute
   NotificationsRoute: typeof NotificationsRoute
   PostRoute: typeof PostRoute
@@ -102,6 +125,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NetworkRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/jobs': {
       id: '/jobs'
       path: '/jobs'
@@ -122,6 +152,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   JobsRoute: JobsRoute,
+  MessagesRoute: MessagesRoute,
   NetworkRoute: NetworkRoute,
   NotificationsRoute: NotificationsRoute,
   PostRoute: PostRoute,
