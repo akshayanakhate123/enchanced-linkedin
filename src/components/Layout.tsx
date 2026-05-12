@@ -22,13 +22,13 @@ function TopBar() {
   );
 }
 
-const tabs = [
+const tabs: { to: string; label: string; icon: typeof Home; exact?: boolean }[] = [
   { to: "/", label: "Home", icon: Home, exact: true },
   { to: "/network", label: "My Network", icon: Users },
   { to: "/post", label: "Post", icon: PlusSquare },
   { to: "/notifications", label: "Notifications", icon: Bell },
   { to: "/jobs", label: "Jobs", icon: Briefcase },
-] as const;
+];
 
 function BottomNav() {
   const loc = useLocation();
@@ -40,7 +40,7 @@ function BottomNav() {
         return (
           <Link
             key={t.to}
-            to={t.to}
+            to={t.to as any}
             className="flex-1 flex flex-col items-center gap-0.5 py-2 text-[11px]"
           >
             <Icon className={`h-6 w-6 ${active ? "text-foreground" : "text-muted-foreground"}`} strokeWidth={active ? 2.5 : 1.8} />
