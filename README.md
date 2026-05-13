@@ -1,4 +1,4 @@
-# CampusGraph
+# LinkedIN_Clone
 
 > The professional network MBA students actually need — built for verified cohorts, alumni outreach, and high-signal career moves.
 
@@ -6,7 +6,7 @@
 
 ## 🚀 Hero
 
-**CampusGraph** is a mobile-first professional networking app for verified MBA students and alumni. It takes the visual language of LinkedIn and rebuilds the parts that matter most for business school students: **structured alumni outreach, cohort intelligence, and paid Office Hours** — turning vague "let's connect" requests into measurable career outcomes.
+**LinkedIN_Clone** is a mobile-first professional networking app for verified MBA students and alumni. It takes the visual language of LinkedIn and rebuilds the parts that matter most for business school students: **structured alumni outreach, cohort intelligence, and paid Office Hours** — turning vague "let's connect" requests into measurable career outcomes.
 
 - 🎯 **Value:** Convert your alumni network into interviews, referrals, and offers.
 - 🧩 **Problem solved:** No more cold "Hi sir, can you refer me?" DMs lost in a recruiter's inbox.
@@ -29,13 +29,13 @@ MBA students live or die by their network — yet the tools they use are built f
 - **Cohort signal is invisible.** Students don't know what their classmates are winning, applying to, or earning — so prep stays generic.
 - **No accountability layer.** There's no way to book, pay for, or track a real mentorship conversation.
 
-LinkedIn optimizes for *everyone*. CampusGraph optimizes for *the 24-month window where an MBA student needs maximum leverage*.
+LinkedIn optimizes for *everyone*. LinkedIN_Clone optimizes for *the 24-month window where an MBA student needs maximum leverage*.
 
 ---
 
 ## 💡 Solution Overview
 
-CampusGraph treats **student ↔ alumni outreach as a first-class product surface** with three differentiating layers:
+LinkedIN_Clone treats **student ↔ alumni outreach as a first-class product surface** with three differentiating layers:
 
 1. **Intent Picker** — Every "Connect" forces a structured intent: *Referral Ask*, *Office Hours*, *Mentorship*, *Coffee Chat*. Alumni see context, not noise.
 2. **My Cohort** — A dedicated tab showing your verified classmates' wins, offers, and benchmarks in real time.
@@ -53,7 +53,7 @@ Book Office Hours → Get referral → Track outcome → Pay it forward
 
 ### Key Differentiators
 
-|                | LinkedIn          | CampusGraph                       |
+|                | LinkedIn          | LinkedIN_Clone                       |
 | -------------- | ----------------- | --------------------------------- |
 | Verification   | Self-declared     | School-verified students & alumni |
 | Outreach       | Free-text DM      | Structured intents                |
@@ -116,7 +116,7 @@ Book Office Hours → Get referral → Track outcome → Pay it forward
 
 ## 🏛️ Architecture / System Design
 
-CampusGraph runs as an **edge-rendered TanStack Start app** with a thin server-function layer in front of Postgres. The mobile-first client talks to typed server functions; webhooks and cron jobs use public API routes.
+LinkedIN_Clone runs as an **edge-rendered TanStack Start app** with a thin server-function layer in front of Postgres. The mobile-first client talks to typed server functions; webhooks and cron jobs use public API routes.
 
 ```mermaid
 flowchart LR
@@ -145,7 +145,7 @@ flowchart LR
 ## 📁 Folder Structure
 
 ```
-campusgraph/
+LinkedIN_Clone/
 ├── src/
 │   ├── routes/                # File-based routing (TanStack)
 │   │   ├── __root.tsx
