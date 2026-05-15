@@ -14,13 +14,17 @@ export type User = {
   location?: string;
 };
 
-const av = (seed: string) => `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+const woman = (n: number) => `https://randomuser.me/api/portraits/women/${n}.jpg`;
+const man = (n: number) => `https://randomuser.me/api/portraits/men/${n}.jpg`;
+
+export const profileBanner =
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80";
 
 export const currentUser: User = {
   id: "u0",
   name: "Akshaya Patel",
   headline: "PGP in Mgt and Tech @ SSB | Ex-Salesforce Application Developer @ Accenture",
-  avatar: av("Akshaya"),
+  avatar: woman(68),
   school: "Scaler School of Business",
   gradYear: 2027,
   isVerifiedStudent: true,
@@ -34,7 +38,7 @@ export const users: User[] = [
   {
     id: "u1", name: "Rohit Kumar",
     headline: "Engagement Manager @ McKinsey & Company | SSB Alum '22",
-    avatar: av("Rohit"), school: "Scaler School of Business", gradYear: 2022,
+    avatar: man(32), school: "Scaler School of Business", gradYear: 2022,
     isVerifiedAlum: true, offersOfficeHours: true,
     company: "McKinsey & Company", role: "Engagement Manager", location: "Mumbai, India",
     officeHoursSlots: [
@@ -46,53 +50,67 @@ export const users: User[] = [
   {
     id: "u2", name: "Priya Sharma",
     headline: "Senior Consultant @ Bain & Company | SSB '23",
-    avatar: av("Priya"), school: "Scaler School of Business", gradYear: 2023,
+    avatar: woman(44), school: "Scaler School of Business", gradYear: 2023,
     isVerifiedAlum: true, offersOfficeHours: true,
     company: "Bain & Company", role: "Senior Consultant", location: "Gurgaon, India",
     officeHoursSlots: [
       { id: "s4", date: "Fri, Nov 22", time: "5:00 PM", duration: "15 min", price: "Free" },
+      { id: "s4b", date: "Mon, Nov 25", time: "7:00 PM", duration: "20 min", price: "₹400" },
+      { id: "s4c", date: "Thu, Nov 28", time: "4:30 PM", duration: "15 min", price: "Free" },
     ],
   },
   {
     id: "u3", name: "Aanya Mehta",
     headline: "Product Manager @ Flipkart | SSB Alum '21",
-    avatar: av("Aanya"), school: "Scaler School of Business", gradYear: 2021,
+    avatar: woman(65), school: "Scaler School of Business", gradYear: 2021,
     isVerifiedAlum: true, offersOfficeHours: false,
     company: "Flipkart", role: "Product Manager", location: "Bengaluru, India",
   },
   {
     id: "u4", name: "Vikram Iyer",
     headline: "Associate @ BCG | Ex-Goldman Sachs",
-    avatar: av("Vikram"), school: "Scaler School of Business", gradYear: 2022,
+    avatar: man(45), school: "Scaler School of Business", gradYear: 2022,
     isVerifiedAlum: true, offersOfficeHours: true,
     company: "BCG", role: "Associate", location: "Mumbai, India",
     officeHoursSlots: [
       { id: "s5", date: "Sun, Nov 24", time: "10:00 AM", duration: "30 min", price: "₹500" },
+      { id: "s5b", date: "Wed, Nov 27", time: "8:00 PM", duration: "15 min", price: "Free" },
+      { id: "s5c", date: "Sat, Nov 30", time: "11:30 AM", duration: "20 min", price: "₹300" },
     ],
   },
   {
     id: "u5", name: "Sneha Reddy",
     headline: "Senior PM @ Zomato | Building consumer products",
-    avatar: av("Sneha"), school: "Scaler School of Business", gradYear: 2020,
+    avatar: woman(22), school: "Scaler School of Business", gradYear: 2020,
     isVerifiedAlum: true, offersOfficeHours: false,
     company: "Zomato", role: "Senior PM", location: "Bengaluru, India",
   },
   {
     id: "u6", name: "Arjun Nair",
     headline: "VP Strategy @ Razorpay | Angel investor",
-    avatar: av("Arjun"), school: "Scaler School of Business", gradYear: 2019,
+    avatar: man(51), school: "Scaler School of Business", gradYear: 2019,
     isVerifiedAlum: true, offersOfficeHours: true,
     company: "Razorpay", role: "VP Strategy", location: "Bengaluru, India",
     officeHoursSlots: [
       { id: "s6", date: "Wed, Nov 27", time: "7:00 PM", duration: "20 min", price: "Free" },
+      { id: "s6b", date: "Fri, Nov 29", time: "5:30 PM", duration: "30 min", price: "₹600" },
+      { id: "s6c", date: "Tue, Dec 3", time: "6:00 PM", duration: "15 min", price: "Free" },
     ],
   },
-  // Cohort classmates - same gradYear 2027
-  ...Array.from({ length: 12 }).map((_, i) => {
-    const names = [
-      "Yasodharan Katakam", "Harshal Patil", "Sagar Gupta", "Harshit Poddar",
-      "Naresh Vadlamudi", "Abhignaa Alturu", "Mayur Panchal", "Soham Chotalia",
-      "Jyoti Kumari Singh", "Sanyukta Singh", "Nikhil Narang", "Venkat Shreyas",
+  ...((): User[] => {
+    const cohort = [
+      { name: "Yasodharan Katakam", g: "m", n: 12 },
+      { name: "Harshal Patil", g: "m", n: 14 },
+      { name: "Sagar Gupta", g: "m", n: 15 },
+      { name: "Harshit Poddar", g: "m", n: 16 },
+      { name: "Naresh Vadlamudi", g: "m", n: 17 },
+      { name: "Abhignaa Alturu", g: "w", n: 29 },
+      { name: "Mayur Panchal", g: "m", n: 19 },
+      { name: "Soham Chotalia", g: "m", n: 20 },
+      { name: "Jyoti Kumari Singh", g: "w", n: 31 },
+      { name: "Sanyukta Singh", g: "w", n: 33 },
+      { name: "Nikhil Narang", g: "m", n: 23 },
+      { name: "Venkat Shreyas", g: "m", n: 25 },
     ];
     const taglines = [
       "Selected at McKinsey for summer internship",
@@ -108,24 +126,29 @@ export const users: User[] = [
       "Built ML side project, 2k GitHub stars",
       "Offer from Accenture Strategy",
     ];
-    return {
+    return cohort.map((c, i) => ({
       id: `c${i}`,
-      name: names[i],
+      name: c.name,
       headline: `MBA Candidate '27 · ${taglines[i]}`,
-      avatar: av(names[i]),
+      avatar: c.g === "m" ? man(c.n) : woman(c.n),
       school: "Scaler School of Business",
       gradYear: 2027,
       isVerifiedStudent: true,
-    } as User;
-  }),
+    }));
+  })(),
 ];
 
 export const findUser = (id: string) => users.find((u) => u.id === id)!;
+
+export type CohortType = "Placement" | "Internship" | "Project" | "Win";
 
 export type Post = {
   id: string; authorId: string; content: string; image?: string;
   likes: number; comments: number; reposts: number; timestamp: string;
   socialProof?: string;
+  type?: CohortType;
+  company?: string;
+  daysAgo?: number;
 };
 
 export const posts: Post[] = [
@@ -155,25 +178,63 @@ export const posts: Post[] = [
     id: "c0", authorId: "c0",
     content: "Beyond grateful to share that I've accepted a Senior Analyst role at Genpact starting next month! Huge thanks to the SSB community and my mentors for the support 🙏",
     likes: 184, comments: 42, reposts: 8, timestamp: "3h",
+    type: "Placement", company: "Genpact", daysAgo: 0,
   },
   {
     id: "c1", authorId: "c1",
     content: "Got my PPO from Bain & Company today! 4 months of work, 100s of late nights, but worth every minute. Thank you Scaler School of Business for the prep!",
     likes: 312, comments: 67, reposts: 15, timestamp: "5h",
+    type: "Placement", company: "Bain", daysAgo: 0,
   },
   {
     id: "c2", authorId: "c2",
     content: "Team won 1st place at HUL L.I.M.E! 6,500+ teams nationally, last 4 standing. Going to global rounds next month 🎉",
     likes: 421, comments: 89, reposts: 31, timestamp: "1d",
+    type: "Win", company: "HUL", daysAgo: 1,
   },
   {
     id: "c3", authorId: "c3",
     content: "Starting my APM internship at Flipkart in the Grocery vertical next week. Excited to learn from the team!",
     likes: 156, comments: 34, reposts: 5, timestamp: "1d",
+    type: "Internship", company: "Flipkart", daysAgo: 1,
+  },
+  {
+    id: "c4", authorId: "c4",
+    content: "Final round at BCG cleared! Joining as an Associate Consultant in the Mumbai office post-graduation 🚀",
+    likes: 287, comments: 61, reposts: 12, timestamp: "2d",
+    type: "Placement", company: "BCG", daysAgo: 2,
+  },
+  {
+    id: "c5", authorId: "c5",
+    content: "Excited to share I'll be interning with Zomato's Product team this summer. Building for 100M+ users 🍔",
+    likes: 198, comments: 44, reposts: 7, timestamp: "2d",
+    type: "Internship", company: "Zomato", daysAgo: 2,
+  },
+  {
+    id: "c6", authorId: "c6",
+    content: "Presented our research on Indian D2C unit economics at IIM-A's Research Conclave. Grateful for the platform!",
+    likes: 142, comments: 29, reposts: 6, timestamp: "3d",
+    type: "Project", company: "IIM-A", daysAgo: 3,
+  },
+  {
+    id: "c7", authorId: "c7",
+    content: "Co-founded a climate-tech startup focused on industrial decarbonization. Seed round closing soon 🌱",
+    likes: 365, comments: 72, reposts: 28, timestamp: "4d",
+    type: "Project", company: "Climate-tech", daysAgo: 4,
+  },
+  {
+    id: "c8", authorId: "c8",
+    content: "Selected for Goldman Sachs Markets summer internship! Joining the FX trading desk in Bengaluru.",
+    likes: 254, comments: 48, reposts: 11, timestamp: "5d",
+    type: "Internship", company: "Goldman Sachs", daysAgo: 5,
+  },
+  {
+    id: "c11", authorId: "c11",
+    content: "Got the offer letter from Accenture Strategy today! Closing the placement chapter on a high note.",
+    likes: 219, comments: 53, reposts: 9, timestamp: "6d",
+    type: "Placement", company: "Accenture Strategy", daysAgo: 6,
   },
 ];
-
-export const stories = users.slice(0, 8);
 
 export const notifications = [
   { id: "n1", type: "referral", avatarId: "u2", content: "Priya Sharma sent you a Referral Ask", preview: "Bain & Company · Senior Consultant role", timestamp: "10m", badge: "Referral Ask" },
@@ -218,7 +279,16 @@ export const invitations = [
   { id: "i3", type: "connection", title: "Vikram Iyer wants to connect", subtitle: "Associate at BCG · 12 mutual", time: "1 day ago", avatarId: "u4" },
 ];
 
-export const cohortPulse = "12 classmates were selected at consulting firms this week";
+const CONSULTING_FIRMS = ["McKinsey", "Bain", "BCG", "Kearney", "ZS", "Strategy&"];
+
+export function calculateConsultingPulse() {
+  return posts.filter(
+    (p) =>
+      p.type === "Placement" &&
+      (p.daysAgo ?? 99) <= 7 &&
+      CONSULTING_FIRMS.some((f) => (p.company ?? "").toLowerCase().includes(f.toLowerCase())),
+  ).length;
+}
 
 export const salaryBenchmark = [
   { function: "Consulting", median: "₹28L", color: "#0a66c2" },
