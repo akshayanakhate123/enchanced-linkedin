@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, VerifiedBadge } from "@/components/Layout";
-import { posts, findUser, stories, currentUser } from "@/lib/data";
+import { posts, findUser } from "@/lib/data";
 import { Heart, MessageCircle, Repeat2, Send, MoreHorizontal, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -10,26 +10,10 @@ export const Route = createFileRoute("/")({ component: Index });
 function Index() {
   return (
     <AppShell>
-      <StoryStrip />
       <div className="space-y-2 pt-2">
         {posts.map((p) => <PostCard key={p.id} post={p} />)}
       </div>
     </AppShell>
-  );
-}
-
-function StoryStrip() {
-  return (
-    <div className="flex gap-3 overflow-x-auto px-3 py-3 bg-card border-b border-border no-scrollbar">
-      {[currentUser, ...stories].slice(0, 8).map((u, i) => (
-        <div key={i} className="flex flex-col items-center gap-1 shrink-0 w-16">
-          <div className="rounded-full p-[2px] bg-gradient-to-tr from-primary to-accent">
-            <img src={u.avatar} alt={u.name} className="h-14 w-14 rounded-full bg-card border-2 border-card" />
-          </div>
-          <span className="text-[10px] text-center truncate w-full">{u.name.split(" ")[0]}</span>
-        </div>
-      ))}
-    </div>
   );
 }
 

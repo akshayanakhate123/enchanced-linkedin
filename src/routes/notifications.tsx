@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/Layout";
-import { notifications, findUser } from "@/lib/data";
+import { findUser } from "@/lib/data";
+import { useAllNotifications } from "@/lib/store";
 import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 
@@ -9,6 +10,7 @@ export const Route = createFileRoute("/notifications")({ component: NotifPage })
 function NotifPage() {
   const [filter, setFilter] = useState("All");
   const filters = ["All", "Jobs", "My posts", "Mentions"];
+  const notifications = useAllNotifications();
   const list = filter === "All" ? notifications
     : filter === "Jobs" ? notifications.filter((n) => n.type === "job")
     : filter === "Mentions" ? notifications.filter((n) => n.type === "mention")

@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, VerifiedBadge } from "@/components/Layout";
-import { users, invitations, currentUser, posts, findUser, cohortPulse, salaryBenchmark } from "@/lib/data";
+import { users, invitations, currentUser, posts, findUser, salaryBenchmark, calculateConsultingPulse, type CohortType } from "@/lib/data";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ConnectButton } from "@/components/IntentSheet";
+import { useApp } from "@/lib/store";
 import { X, Check, ChevronRight, ChevronDown, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/network")({ component: NetworkPage });
 
@@ -44,7 +46,7 @@ function GrowTab() {
           {invitations.map((inv) => (
             <div key={inv.id} className="flex items-center gap-3">
               {inv.avatarId ? (
-                <img src={findUser(inv.avatarId).avatar} className="h-12 w-12 rounded-lg" alt="" />
+                <img src={findUser(inv.avatarId).avatar} className="h-12 w-12 rounded-lg object-cover" alt="" />
               ) : (
                 <div className="h-12 w-12 rounded-lg flex items-center justify-center text-white font-bold" style={{ background: inv.logoColor }}>{inv.logo}</div>
               )}
@@ -85,7 +87,7 @@ function GrowTab() {
 function PersonTile({ user }: { user: any }) {
   return (
     <div className="w-40 shrink-0 bg-card border border-border rounded-lg p-3 flex flex-col items-center text-center">
-      <img src={user.avatar} className="h-16 w-16 rounded-full bg-muted" alt="" />
+      <img src={user.avatar} className="h-16 w-16 rounded-full bg-muted object-cover" alt="" />
       <div className="text-sm font-semibold mt-2 line-clamp-1 flex items-center gap-1">{user.name} {user.isVerifiedAlum && <VerifiedBadge />}</div>
       <div className="text-xs text-muted-foreground line-clamp-2 h-8 mt-0.5">{user.headline}</div>
       <div className="text-[10px] text-muted-foreground mt-1">12 mutual</div>
@@ -110,7 +112,7 @@ function CatchTab() {
       <div className="bg-card mt-2">
         {cohort.map((u, i) => (
           <div key={u.id} className={`flex items-start gap-3 p-4 ${i === 0 ? "bg-primary/10" : ""} border-b border-border`}>
-            <img src={u.avatar} className="h-14 w-14 rounded-full" alt="" />
+            <img src={u.avatar} className="h-14 w-14 rounded-full object-cover" alt="" />
             <div className="flex-1">
               <div className="font-semibold text-sm">{u.name}</div>
               <div className="text-sm text-muted-foreground">{i === 0 ? "Started a new position as Senior Analyst at Genpact" : `Celebrate ${u.name.split(" ")[0]}'s recent birthday on May ${12 - i}`}</div>
@@ -127,47 +129,36 @@ function CatchTab() {
 }
 
 function CohortTab() {
-  const [filter, setFilter] = useState("All");
-  const filters = ["All", "Placements", "Internships", "Projects", "Wins"];
+  const [filter, setFilter] = useState<"All" | CohortType>("All");
+  const filters: ("All" | CohortType)[] = ["All", "Placement", "Internship", "Project", "Win"];
+  const filterLabels: Record<string, string> = { All: "All", Placement: "Placements", Internship: "Internships", Project: "Projects", Win: "Wins" };
   const cohortPosts = posts.filter((p) => p.id.startsWith("c"));
+  const visible = filter === "All" ? cohortPosts : cohortPosts.filter((p) => p.type === filter);
   const [showSalary, setShowSalary] = useState(false);
+  const consultingCount = calculateConsultingPulse();
+  const placementsCount = cohortPosts.filter((p) => p.type === "Placement" && (p.daysAgo ?? 99) <= 7).length;
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 pb-4">
       <section className="bg-gradient-to-br from-primary/30 to-accent/20 m-3 rounded-xl p-4 border border-primary/30">
         <div className="text-xs text-accent font-semibold uppercase tracking-wide">Your cohort</div>
         <div className="text-lg font-bold mt-1">Class of 2027 · SSB</div>
-        <div className="text-sm text-muted-foreground">247 classmates</div>
+        <div className="text-sm text-muted-foreground">247 classmates · {placementsCount} placements this week</div>
       </section>
       <section className="bg-card mx-3 rounded-xl p-4 border border-accent/40 flex gap-3 items-center">
         <div className="h-10 w-10 rounded-full bg-accent/20 flex items-center justify-center"><Sparkles className="h-5 w-5 text-accent" /></div>
-        <p className="text-sm">{cohortPulse}</p>
+        <p className="text-sm">{consultingCount} classmates were selected at consulting firms this week</p>
       </section>
       <div className="flex gap-2 px-3 py-2 overflow-x-auto no-scrollbar">
         {filters.map((f) => (
-          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-1.5 rounded-full text-xs whitespace-nowrap border ${filter === f ? "bg-accent text-accent-foreground border-accent" : "border-border"}`}>{f}</button>
+          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-1.5 rounded-full text-xs whitespace-nowrap border ${filter === f ? "bg-accent text-accent-foreground border-accent" : "border-border"}`}>{filterLabels[f]}</button>
         ))}
       </div>
       <div className="space-y-2">
-        {cohortPosts.map((p) => {
-          const u = findUser(p.authorId);
-          return (
-            <article key={p.id} className="bg-card p-4">
-              <div className="flex items-start gap-3">
-                <img src={u.avatar} className="h-11 w-11 rounded-full" alt="" />
-                <div className="flex-1">
-                  <div className="text-sm font-semibold flex items-center gap-1">{u.name} <VerifiedBadge /></div>
-                  <div className="text-xs text-muted-foreground line-clamp-1">{u.headline}</div>
-                  <div className="text-xs text-muted-foreground">{p.timestamp}</div>
-                </div>
-              </div>
-              <p className="text-sm mt-3">{p.content}</p>
-              <div className="flex gap-2 mt-3">
-                <Button size="sm" className="rounded-full h-8 bg-accent hover:bg-accent/90 text-accent-foreground">🎉 Congratulate</Button>
-                <Button size="sm" variant="outline" className="rounded-full h-8">Comment</Button>
-              </div>
-            </article>
-          );
-        })}
+        {visible.length === 0 && (
+          <div className="text-center text-sm text-muted-foreground py-8">No posts in this category yet.</div>
+        )}
+        {visible.map((p) => <CohortPostCard key={p.id} post={p} />)}
       </div>
       <section className="bg-card mx-3 mt-3 rounded-xl border border-border overflow-hidden">
         <button onClick={() => setShowSalary(!showSalary)} className="w-full p-4 flex items-center justify-between">
@@ -189,5 +180,70 @@ function CohortTab() {
         )}
       </section>
     </div>
+  );
+}
+
+function CohortPostCard({ post }: { post: typeof posts[number] }) {
+  const u = findUser(post.authorId);
+  const { congratulated, congratulate, comments, addComment } = useApp();
+  const isCongrats = congratulated.has(post.id);
+  const [composing, setComposing] = useState(false);
+  const [text, setText] = useState("");
+  const list = comments[post.id] ?? [];
+
+  const submitComment = () => {
+    if (!text.trim()) return;
+    addComment(post.id, text.trim());
+    setText("");
+    setComposing(false);
+    toast.success("Comment posted");
+  };
+
+  return (
+    <article className="bg-card p-4">
+      <div className="flex items-start gap-3">
+        <img src={u.avatar} className="h-11 w-11 rounded-full object-cover" alt="" />
+        <div className="flex-1">
+          <div className="text-sm font-semibold flex items-center gap-1">{u.name} <VerifiedBadge /></div>
+          <div className="text-xs text-muted-foreground line-clamp-1">{u.headline}</div>
+          <div className="text-xs text-muted-foreground">{post.timestamp}{post.type ? ` · ${post.type}` : ""}</div>
+        </div>
+      </div>
+      <p className="text-sm mt-3">{post.content}</p>
+      <div className="flex gap-2 mt-3">
+        <Button
+          size="sm"
+          disabled={isCongrats}
+          onClick={() => {
+            congratulate(post.id, post.authorId);
+            toast.success(`Sent congrats to ${u.name.split(" ")[0]}`);
+          }}
+          className={`rounded-full h-8 ${isCongrats ? "bg-muted text-muted-foreground" : "bg-accent hover:bg-accent/90 text-accent-foreground"}`}
+        >
+          {isCongrats ? "Congratulated ✓" : "🎉 Congratulate"}
+        </Button>
+        <Button size="sm" variant="outline" className="rounded-full h-8" onClick={() => setComposing((v) => !v)}>Comment</Button>
+      </div>
+      {composing && (
+        <div className="mt-3 flex gap-2">
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Add a comment…"
+            className="flex-1 bg-secondary rounded-full px-3 py-2 text-sm border border-border outline-none"
+          />
+          <Button size="sm" className="rounded-full" onClick={submitComment}>Post</Button>
+        </div>
+      )}
+      {list.length > 0 && (
+        <div className="mt-3 space-y-2 border-t border-border pt-3">
+          {list.map((c, i) => (
+            <div key={i} className="text-sm bg-secondary/40 rounded-lg p-2">
+              <span className="font-semibold">You: </span>{c}
+            </div>
+          ))}
+        </div>
+      )}
+    </article>
   );
 }
