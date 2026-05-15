@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { messages, findUser } from "@/lib/data";
+import { findUser } from "@/lib/data";
+import { useAllMessages } from "@/lib/store";
 import { useState } from "react";
 import { ArrowLeft, MoreHorizontal, PenSquare, Search } from "lucide-react";
 
@@ -8,6 +9,7 @@ export const Route = createFileRoute("/messages")({ component: MsgPage });
 function MsgPage() {
   const nav = useNavigate();
   const [folder, setFolder] = useState("Focus");
+  const messages = useAllMessages();
   const list = messages.filter((m) => m.folder === folder);
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-[480px] mx-auto">
