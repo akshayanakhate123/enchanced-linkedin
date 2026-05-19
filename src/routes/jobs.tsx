@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { IntentSheet } from "@/components/IntentSheet";
 import { useApp } from "@/lib/store";
-import { X, Bookmark, ListChecks, Briefcase } from "lucide-react";
+import { X, Bookmark, ListChecks, Briefcase, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/jobs")({ component: JobsPage });
 
@@ -54,14 +54,21 @@ function JobsPage() {
                   <img src={poster.avatar} className="h-4 w-4 rounded-full object-cover" alt="" />
                   Posted by {poster.name.split(" ")[0]}
                 </div>
-                <Button
-                  size="sm"
+                <button
                   disabled={pending}
                   onClick={() => setTarget({ user: poster, company: j.company, role: j.role })}
-                  className={`mt-2 rounded-full h-8 text-xs ${pending ? "bg-muted text-muted-foreground" : "bg-accent hover:bg-accent/90 text-accent-foreground"}`}
+                  className={`group relative mt-3 inline-flex items-center gap-2 rounded-2xl px-4 h-9 text-xs font-semibold transition-all duration-300 ${
+                    pending
+                      ? "bg-muted text-muted-foreground cursor-not-allowed"
+                      : "text-primary border border-primary/40 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent hover:border-primary hover:-translate-y-0.5 hover:shadow-[0_0_24px_-4px_hsl(var(--primary)/0.6)] active:translate-y-0"
+                  }`}
                 >
-                  {pending ? "Pending" : "Ask for Referral"}
-                </Button>
+                  {!pending && (
+                    <span className="absolute inset-0 rounded-2xl bg-primary/10 opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300 -z-10" />
+                  )}
+                  <Sparkles className={`h-3.5 w-3.5 ${pending ? "" : "group-hover:rotate-12 transition-transform"}`} />
+                  {pending ? "Request Pending" : "What's your intent?"}
+                </button>
               </div>
               <X className="h-5 w-5 text-muted-foreground" />
             </div>
@@ -76,7 +83,6 @@ function JobsPage() {
         open={!!target}
         onOpenChange={(o) => !o && setTarget(null)}
         target={target?.user ?? null}
-        prefilledIntent="referral"
         prefilledCompany={target?.company}
         prefilledRole={target?.role}
       />

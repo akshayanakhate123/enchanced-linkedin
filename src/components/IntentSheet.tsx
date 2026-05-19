@@ -102,7 +102,7 @@ export function IntentSheet({ open, onOpenChange, target, prefilledIntent, prefi
               </p>
             </SheetHeader>
             <div className="space-y-2 mt-4">
-              {INTENTS.map((i) => {
+              {INTENTS.map((i, idx) => {
                 const left = remainingFor(i.id);
                 const disabled = left === 0;
                 return (
@@ -110,7 +110,8 @@ export function IntentSheet({ open, onOpenChange, target, prefilledIntent, prefi
                     key={i.id}
                     onClick={() => !disabled && setSelected(i.id)}
                     disabled={disabled}
-                    className={`w-full text-left p-4 rounded-xl border border-border bg-secondary/40 hover:bg-secondary transition flex items-start gap-3 ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                    style={{ animationDelay: `${idx * 60}ms`, animationFillMode: "both" }}
+                    className={`w-full text-left p-4 rounded-2xl border border-border bg-gradient-to-br from-secondary/60 to-secondary/20 hover:border-primary/50 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-12px_hsl(var(--primary)/0.5)] transition-all duration-300 flex items-start gap-3 animate-fade-in ${disabled ? "opacity-50 cursor-not-allowed hover:translate-y-0 hover:border-border" : ""}`}
                   >
                     <span className="text-2xl">{i.emoji}</span>
                     <div className="flex-1">
