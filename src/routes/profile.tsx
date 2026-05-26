@@ -3,9 +3,11 @@ import { currentUser, users, profileBanner, findUser } from "@/lib/data";
 import { VerifiedBadge } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Search, Settings, Pencil, MoreHorizontal, Calendar, Plus, CalendarCheck } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Moon, Sun } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
 
@@ -118,7 +120,41 @@ function ProfilePage() {
           ))}
         </div>
       </section>
+
+      <ThemeToggleCard />
     </div>
+  );
+}
+
+function ThemeToggleCard() {
+  const [isLight, setIsLight] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    const light = saved === "light";
+    setIsLight(light);
+    document.documentElement.classList.toggle("light", light);
+  }, []);
+
+  const toggle = (v: boolean) => {
+    setIsLight(v);
+    document.documentElement.classList.toggle("light", v);
+    localStorage.setItem("theme", v ? "light" : "dark");
+  };
+
+  return (
+    <section className="bg-card mt-3 p-4 mx-3 rounded-xl border border-border flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center">
+          {isLight ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </div>
+        <div>
+          <div className="font-semibold text-sm">Appearance</div>
+          <div className="text-xs text-muted-foreground">{isLight ? "Light mode" : "Dark mode"}</div>
+        </div>
+      </div>
+      <Switch checked={isLight} onCheckedChange={toggle} />
+    </section>
   );
 }
 
