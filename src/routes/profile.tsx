@@ -2,13 +2,12 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { currentUser, users, profileBanner, findUser } from "@/lib/data";
 import { VerifiedBadge } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search, Settings, Pencil, MoreHorizontal, Calendar, Plus, CalendarCheck, Sun, Moon } from "lucide-react";
+import { ArrowLeft, Search, Settings, Pencil, MoreHorizontal, Calendar, Plus, CalendarCheck } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
-import { useTheme } from "@/lib/theme";
 
 export const Route = createFileRoute("/profile")({ component: ProfilePage });
 
@@ -119,39 +118,7 @@ function ProfilePage() {
           ))}
         </div>
       </section>
-
-      <ThemeToggleCard />
     </div>
-  );
-}
-
-function ThemeToggleCard() {
-  const { theme, toggle } = useTheme();
-  const isLight = theme === "light";
-  return (
-    <section className="bg-card mt-3 p-4 mx-3 rounded-xl border border-border">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center">
-            {isLight ? <Sun className="h-5 w-5 text-accent" /> : <Moon className="h-5 w-5 text-primary" />}
-          </div>
-          <div>
-            <h3 className="font-semibold text-sm">Appearance</h3>
-            <p className="text-xs text-muted-foreground">{isLight ? "Light mode" : "Dark mode"}</p>
-          </div>
-        </div>
-        <button
-          role="switch"
-          aria-checked={isLight}
-          onClick={toggle}
-          className={`relative h-7 w-12 rounded-full transition-colors ${isLight ? "bg-primary" : "bg-secondary border border-border"}`}
-        >
-          <span
-            className={`absolute top-0.5 h-6 w-6 rounded-full bg-card shadow transition-transform ${isLight ? "translate-x-5" : "translate-x-0.5"}`}
-          />
-        </button>
-      </div>
-    </section>
   );
 }
 
