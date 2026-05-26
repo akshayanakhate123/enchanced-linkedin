@@ -11,6 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { AppProvider } from "@/lib/store";
+import { ThemeProvider } from "@/lib/theme";
 
 function NotFoundComponent() {
   return (
@@ -119,10 +120,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppProvider>
-        <Outlet />
-        <Toaster position="top-center" />
-      </AppProvider>
+      <ThemeProvider>
+        <AppProvider>
+          <Outlet />
+          <Toaster position="top-center" />
+        </AppProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
