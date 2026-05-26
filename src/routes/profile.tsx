@@ -2,12 +2,13 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { currentUser, users, profileBanner, findUser } from "@/lib/data";
 import { VerifiedBadge } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search, Settings, Pencil, MoreHorizontal, Calendar, Plus, CalendarCheck } from "lucide-react";
+import { ArrowLeft, Search, Settings, Pencil, MoreHorizontal, Calendar, Plus, CalendarCheck, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useApp } from "@/lib/store";
+import { useTheme } from "@/lib/theme";
 
 export const Route = createFileRoute("/profile")({ component: ProfilePage });
 
@@ -118,7 +119,37 @@ function ProfilePage() {
           ))}
         </div>
       </section>
+
+      <AppearanceToggle />
     </div>
+  );
+}
+
+function AppearanceToggle() {
+  const { theme, setTheme } = useTheme();
+  return (
+    <section className="bg-card mt-3 p-4 mx-3 rounded-xl border border-border">
+      <h3 className="font-semibold mb-1">Appearance</h3>
+      <p className="text-xs text-muted-foreground mb-3">Choose how AluLink looks on this device.</p>
+      <div className="grid grid-cols-2 gap-2 p-1 rounded-full bg-secondary/60 border border-border">
+        <button
+          onClick={() => setTheme("light")}
+          className={`flex items-center justify-center gap-2 py-2 rounded-full text-sm font-medium transition-all ${
+            theme === "light" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Sun className="h-4 w-4" /> Light Mode
+        </button>
+        <button
+          onClick={() => setTheme("dark")}
+          className={`flex items-center justify-center gap-2 py-2 rounded-full text-sm font-medium transition-all ${
+            theme === "dark" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Moon className="h-4 w-4" /> Dark Mode
+        </button>
+      </div>
+    </section>
   );
 }
 
